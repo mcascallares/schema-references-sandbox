@@ -1,0 +1,10 @@
+{
+    "type": "record",
+    "namespace": "org.matias",
+    "name": "Product",
+    "fields": [
+        {"name": "product_id", "type": "int"},
+        {"name": "product_name", "type": "string"},
+        {"name": "product_price", "type": "double"}
+    ]
+   }
