@@ -16,6 +16,28 @@ docker-compose up -d
 mvn schema-registry:register
 ```
 
+From the output, capture the subject ID for `all-types-value`. You will need that value for the producer application. In the example execution below, the value is 3. Note that you can also get that ID executing `curl -XGET http://localhost:8081/subjects/all-types-value/versions/1` 
+
+```
+mvn schema-registry:register
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -------------< org.mcascallares:schema-references-sandbox >-------------
+[INFO] Building schema-references-sandbox 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- kafka-schema-registry-maven-plugin:6.1.0:register (default-cli) @ schema-references-sandbox ---
+[INFO] Registered subject(customer) with id 1 version 1
+[INFO] Registered subject(product) with id 2 version 1
+[INFO] Registered subject(all-types-value) with id 3 version 1
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.149 s
+[INFO] Finished at: 2021-05-24T15:13:33+02:00
+[INFO] ------------------------------------------------------------------------
+```
+
 
 ## Retrieving registered schemas
 
@@ -25,20 +47,6 @@ curl -XGET http://localhost:8081/subjects
   "product",
   "all-types-value",
   "customer"
-]
-```
-
-```
-curl -XGET curl -XGET http://localhost:8081/subjects/product/versions
-[
-  1
-]
-```
-
-```
-curl -XGET curl -XGET http://localhost:8081/subjects/customer/versions
-[
-  1
 ]
 ```
 
@@ -88,14 +96,23 @@ curl -XGET http://localhost:8081/subjects/all-types-value/versions/1
 ## Starting consumer
 
 ```
-docker-compose exec schema-registry kafka-avro-console-consumer --topic all-types --bootstrap-server broker:9092 --from-beginning
+docker-compose exec schema-registry kafka-avro-console-consumer \
+    --bootstrap-server broker:9092 \
+    --topic all-types \
+    --from-beginning
 ```
 
 
 ## Starting producer (assuming version=1)
 
 ```
-docker-compose exec schema-registry kafka-avro-console-producer --bootstrap-server broker:9092 --topic all-types --property value.schema.id=<top-level-id> --property auto.register=false --property use.latest.version=true
+docker-compose exec schema-registry kafka-avro-console-producer \
+    --bootstrap-server broker:9092 \
+    --topic all-types \
+    --property value.schema.id=<top-level-id> \
+    --property auto.register=false \
+    --property use.latest.version=true
+    
 { "org.matias.Product": { "product_id": 1, "product_name" : "rice", "product_price" : 100.00 } } 
 { "org.matias.Customer": { "customer_id": 100, "customer_name": "acme", "customer_email": "acme@google.com", "customer_address": "1 Main St" } } 
 ```
