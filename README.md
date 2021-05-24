@@ -1,6 +1,13 @@
 # Schema References Sandbox
 
-This sample repository contains the example, source code and configuration described in [this post](https://www.confluent.io/blog/multiple-event-types-in-the-same-kafka-topic/).
+Schema References is a feature introduced in Confluent Platform 5.5 that 
+allows to mix different types, in the same topic, and still being able to 
+enforce types and data type validation.
+
+This sample repository contains the example, source code and 
+configuration described in [this great post]
+(https://www.confluent.io/blog/multiple-event-types-in-the-same-kafka-topic/) 
+by [@rayokota](https://github.com/rayokota).
 
 
 ## Starting the environment
