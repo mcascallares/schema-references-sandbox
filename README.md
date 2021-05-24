@@ -19,8 +19,6 @@ mvn schema-registry:register
 From the output, capture the subject ID for `all-types-value`. You will need that value for the producer application. In the example execution below, the value is 3. Note that you can also get that ID executing `curl -XGET http://localhost:8081/subjects/all-types-value/versions/1` 
 
 ```
-> mvn schema-registry:register
-
 [INFO] Scanning for projects...
 [INFO]
 [INFO] -------------< org.mcascallares:schema-references-sandbox >-------------
