@@ -109,7 +109,7 @@ docker-compose exec schema-registry kafka-avro-console-consumer \
 ```
 
 
-## Starting producer
+## Starting producer mixing types and being validated
 
 ```
 docker-compose exec schema-registry kafka-avro-console-producer \
