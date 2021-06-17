@@ -2,7 +2,7 @@
 
 Schema References is a feature introduced in Confluent Platform 5.5 that 
 allows to mix different types, in the same topic, and still being able to 
-enforce types and data type validation.
+enforce types and data type validation using a `TopicNameStrategy`.
 
 This sample repository contains the example, source code and 
 configuration described in 
