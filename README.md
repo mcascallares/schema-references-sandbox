@@ -150,6 +150,64 @@ Caused by: org.apache.avro.AvroTypeException: Unknown union branch org.matias.No
 [2022-11-28 21:16:04,195] INFO App info kafka.producer for console-producer unregistered (org.apache.kafka.common.utils.AppInfoParser)
 ```
 
+
+## Verifying the broker side schema validation
+
+Based on [this demo](https://docs.confluent.io/platform/current/schema-registry/schema-validation.html#demo-enabling-sv-on-a-topic-at-the-command-line).
+
+1. Create the topic
+
+```shell
+  docker-compose exec broker kafka-topics --bootstrap-server broker:9092 --create --partitions 1 --replication-factor 1 --topic test-schemas
+```
+
+2. Start a producer (using default serializer)
+
+```shell
+  docker-compose exec broker kafka-console-producer --broker-list broker:9092 --topic test-schemas --property parse.key=true --property key.separator=,
+```
+
+3. Produce something as example (`1` is the key, `my first record` is the value, no schemas are reinforced)
+```
+  >1,my first record
+```
+
+4. In another shell, create a consumer (you should see the event produced above)
+```shell
+  docker-compose exec broker kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --topic test-schemas --property print.key=true
+```
+
+5. Let's enable the validation (you should see `Completed updating config for topic test-schemas.`)
+
+```shell
+  docker-compose exec broker kafka-configs --bootstrap-server broker:9092 --alter --entity-type topics --entity-name test-schemas --add-config confluent.value.schema.validation=true
+```
+
+6. Add a new record in the producer started on step 2.
+```
+  >2,my second record
+```
+
+You will see an exception returned:
+
+```shell
+>[...] ERROR Error when sending message to topic test-schemas with key: 1 bytes, value: 16 bytes with error: (org.apache.kafka.clients.producer.internals.ErrorLoggingCallback)
+org.apache.kafka.common.InvalidRecordException: Log record DefaultRecord(offset=0, timestamp=1671010385783, key=1 bytes, value=16 bytes) is rejected by the record interceptor io.confluent.kafka.schemaregistry.validator.RecordSchemaValidator
+```
+
+7. Let's now disable the validation (you should see `Completed updating config for topic test-schemas.`)
+
+```shell
+  docker-compose exec broker kafka-configs --bootstrap-server broker:9092 --alter --entity-type topics --entity-name test-schemas --add-config confluent.value.schema.validation=false
+```
+
+8. And add a third record in the producer started on step 2.
+```
+  >3,the third record
+```
+
+This one should be accepted as there is no validation on the broker side.
+
 ## Clean-up
 
 1. Stop the consumer/producer with a Ctrl + C
