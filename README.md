@@ -195,6 +195,8 @@ You will see an exception returned:
 org.apache.kafka.common.InvalidRecordException: Log record DefaultRecord(offset=0, timestamp=1671010385783, key=1 bytes, value=16 bytes) is rejected by the record interceptor io.confluent.kafka.schemaregistry.validator.RecordSchemaValidator
 ```
 
+That happens because Schema Validation is enabled and the messages we are sending **do not contain schema IDs**: This record has failed the validation on broker
+
 7. Let's now disable the validation (you should see `Completed updating config for topic test-schemas.`)
 
 ```shell
