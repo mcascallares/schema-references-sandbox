@@ -13,7 +13,7 @@ by [@rayokota](https://github.com/rayokota).
 ## Starting the environment
 
 ```shell
-docker-compose up -d
+docker compose up -d
 ```
 
 
