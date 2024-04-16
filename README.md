@@ -102,7 +102,7 @@ curl -XGET http://localhost:8081/subjects/all-types-value/versions/1 | jq
 ## Starting consumer
 
 ```shell
-docker-compose exec schema-registry kafka-avro-console-consumer \
+docker compose exec schema-registry kafka-avro-console-consumer \
     --bootstrap-server broker:9092 \
     --topic all-types \
     --from-beginning
@@ -113,7 +113,7 @@ docker-compose exec schema-registry kafka-avro-console-consumer \
 
 ```shell
 # <top-level-id> is 3 in this example
-docker-compose exec schema-registry kafka-avro-console-producer \
+docker compose exec schema-registry kafka-avro-console-producer \
     --bootstrap-server broker:9092 \
     --topic all-types \
     --property value.schema.id=<top-level-id> \
@@ -158,13 +158,13 @@ Based on [this demo](https://docs.confluent.io/platform/current/schema-registry/
 1. Create the topic
 
 ```shell
-  docker-compose exec broker kafka-topics --bootstrap-server broker:9092 --create --partitions 1 --replication-factor 1 --topic test-schemas
+  docker compose exec broker kafka-topics --bootstrap-server broker:9092 --create --partitions 1 --replication-factor 1 --topic test-schemas
 ```
 
 2. Start a producer (using default serializer)
 
 ```shell
-  docker-compose exec broker kafka-console-producer --broker-list broker:9092 --topic test-schemas --property parse.key=true --property key.separator=,
+  docker compose exec broker kafka-console-producer --broker-list broker:9092 --topic test-schemas --property parse.key=true --property key.separator=,
 ```
 
 3. Produce something as example (`1` is the key, `my first record` is the value, no schemas are reinforced)
@@ -174,13 +174,13 @@ Based on [this demo](https://docs.confluent.io/platform/current/schema-registry/
 
 4. In another shell, create a consumer (you should see the event produced above)
 ```shell
-  docker-compose exec broker kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --topic test-schemas --property print.key=true
+  docker compose exec broker kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --topic test-schemas --property print.key=true
 ```
 
 5. Let's enable the validation (you should see `Completed updating config for topic test-schemas.`)
 
 ```shell
-  docker-compose exec broker kafka-configs --bootstrap-server broker:9092 --alter --entity-type topics --entity-name test-schemas --add-config confluent.value.schema.validation=true
+  docker compose exec broker kafka-configs --bootstrap-server broker:9092 --alter --entity-type topics --entity-name test-schemas --add-config confluent.value.schema.validation=true
 ```
 
 6. Add a new record in the producer started on step 2.
@@ -200,7 +200,7 @@ That happens because Schema Validation is enabled and the messages we are sendin
 7. Let's now disable the validation (you should see `Completed updating config for topic test-schemas.`)
 
 ```shell
-  docker-compose exec broker kafka-configs --bootstrap-server broker:9092 --alter --entity-type topics --entity-name test-schemas --add-config confluent.value.schema.validation=false
+  docker compose exec broker kafka-configs --bootstrap-server broker:9092 --alter --entity-type topics --entity-name test-schemas --add-config confluent.value.schema.validation=false
 ```
 
 8. And add a third record in the producer started on step 2.
