@@ -216,5 +216,5 @@ This one should be accepted as there is no validation on the broker side.
 2. Stop docker containers
 
 ```shell
-docker-compose down -v
+docker compose down -v
 ```
