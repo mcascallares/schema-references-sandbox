@@ -31,8 +31,6 @@ services:
       KAFKA_TOOLS_LOG4J_LOGLEVEL: ERROR
       KAFKA_JMX_PORT: 10099
       KAFKA_JMX_HOSTNAME: 0.0.0.0
-      ############################## My Schema Validation Demo Settings ################
-      # Schema Registry URL
       KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
 
   schema-registry:
